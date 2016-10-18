@@ -1,9 +1,7 @@
 require 'sinatra'
 require 'stripe'
 
-#set :publishable_key, ENV['pk_test_WxmqvoiqGGzZqwgACqm0Meen'] # PUBLISHABLE_KEY
-#set :secret_key, ENV['sk_test_0dbVBNRNaiYYFZIRLzZQFeqY'] # SECRET_KEY
-Stripe.api_key = "sk_test_0dbVBNRNaiYYFZIRLzZQFeqY"
+Stripe.api_key = "sk_test_0dbVBNRNaiYYFZIRLzZQFeqY" # use your own keys
 
 get '/' do
   erb :index
@@ -13,11 +11,13 @@ post '/charge' do
   # Amount in cents
   @amount = 500
 
+  # Create customer
   customer = Stripe::Customer.create(
     :email => 'customer@example.com',
     :source  => params[:stripeToken]
   )
 
+  # Create charge
   charge = Stripe::Charge.create(
     :amount      => @amount,
     :description => 'Sinatra Charge',
@@ -27,7 +27,7 @@ post '/charge' do
 
   erb :charge
 
-  	#error Stripe::CardError do
+  #error Stripe::CardError do
 	#  env['sinatra.error'].message
 	#end
 end
